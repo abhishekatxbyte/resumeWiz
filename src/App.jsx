@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import Chat from './Chat';
 import FileUpload from './FileUpload';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,8 +15,6 @@ function App() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffect(() => {
-    console.log(data)
-    console.log(isloading)
     if (isloading) {
       navigate('/loading')
     }
@@ -27,7 +24,6 @@ function App() {
       navigate('/')
     }
   }, [data, isloading])
-  console.log(switchState)
 
   useEffect(() => {
     dispatch(ENABLE_AI(switchState))

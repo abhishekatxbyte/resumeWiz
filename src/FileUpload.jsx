@@ -1,19 +1,17 @@
 // multiple
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { ADD_DATA, ai_status, loading, outputData, sendTextForExtraction } from './store/slice';
-import { useNavigate } from 'react-router-dom';
+import { ADD_DATA, ai_status, sendTextForExtraction } from './store/slice';
 import { extractData } from './extractData';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 function FileUpload() {
     const inputRef = useRef();
-    const [pdfText, setPdfText] = useState('');
     const [pdfFiles, setPdfFiles] = useState([]);
     const ai_enable = useSelector(ai_status)
     const dispatch = useDispatch();
@@ -43,7 +41,6 @@ function FileUpload() {
                 }
 
 
-                setPdfText(extractedText);
                 if (ai_enable) {
                     dispatch(sendTextForExtraction(extractedText))
                 } else {
@@ -83,7 +80,6 @@ function FileUpload() {
         const files = e.target.files;
         if (files.length > 0) {
             setPdfFiles(Array.from(files));
-            setPdfText('');
         }
     };
 
