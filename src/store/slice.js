@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+const apiKey = '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';
 
 // Define the async thunk
 export const sendTextForExtraction = createAsyncThunk(
