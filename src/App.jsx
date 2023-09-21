@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import FileUpload from './FileUpload';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ENABLE_AI, loading, outputData, REMOVE_DATA } from './store/slice';
-import ExtractedTable from './ExtractedTable';
 import { Button, Form, Spinner } from 'react-bootstrap';
+import FileUpload from './Components/FileUpdate/FileUpload';
+import ExtractedTable from './Components/FileUpdate/ExtractedTable';
+import Ocr from './Components/FileUpdate/Ocr';
+
 
 
 function App() {
   const isloading = useSelector(loading)
   const [switchState, setSwitchState] = useState(false);
   const data = useSelector(outputData)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffect(() => {
@@ -60,8 +63,9 @@ function App() {
   return (
     <div className="App">
       <Routes>
-
         <Route path="/" element={layout(<FileUpload />)} />
+        <Route path="/ocr" element={layout(<Ocr />)} />
+
         <Route path="/data" element={layout(<><ExtractedTable /></>)} />
         <Route path="/loading" element={<Spinner animation="border" />} />
       </Routes>

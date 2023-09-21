@@ -1,0 +1,55 @@
+.extractedData {
+    width: 100%;
+    overflow: auto;
+    background-color: #fff;
+    padding: 1em;
+    min-height: 90vh;
+    display: flex;
+    align-items: start;
+    border-radius: 20px;
+    flex-direction: column;
+}
+
+.extractedData h1 {
+    font-size: 5vw;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 900;
+}
+
+.tab {
+    height: 100%;
+    width: 100%;
+    gap: 1em;
+}
+
+.tab-content>.active {
+    width: 100%;
+}
+
+.header {
+    display: flex !important;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    gap: 1em;
+
+}
+
+.list_container {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1em;
+    width: 100%;
+}
+
+.item_list {
+    padding: 1em;
+    text-align: start;
+    border-radius: 5px;
+    background-color: #EDF2FC;
+}
