@@ -166,7 +166,7 @@ body {
 
 .tabs.nav-tabs .nav-item.show .nav-link,
 .tabs.nav-tabs .nav-link {
-  text-align: start;
+  text-align: flex-start;
   color: #000;
   box-shadow: none;
   border-radius: 0;

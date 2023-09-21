@@ -14,9 +14,9 @@ function App() {
   const isloading = useSelector(loading)
   const [switchState, setSwitchState] = useState(false);
   const data = useSelector(outputData)
-
-  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   useEffect(() => {
     if (isloading) {
       navigate('/loading')
@@ -32,6 +32,7 @@ function App() {
     dispatch(ENABLE_AI(switchState))
   }, [switchState])
   const layout = (prop) => {
+
     const handleSwitchChange = () => {
       setSwitchState(!switchState);
     };
