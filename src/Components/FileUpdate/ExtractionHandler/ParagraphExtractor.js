@@ -1,16 +1,16 @@
-import React, { useState } from "react";
 import PizZip from "pizzip";
 import { DOMParser } from "@xmldom/xmldom";
 
+
 function str2xml(str) {
     if (str.charCodeAt(0) === 65279) {
-        // BOM sequence
         str = str.substr(1);
     }
     return new DOMParser().parseFromString(str, "text/xml");
 }
 
-function getParagraphs(content) {
+// Function to extract paragraphs from a DOCX file content
+export function getParagraphs(content) {
     const zip = new PizZip(content);
     const xml = str2xml(zip.files["word/document.xml"].asText());
     const paragraphsXml = xml.getElementsByTagName("w:p");
@@ -31,27 +31,3 @@ function getParagraphs(content) {
     }
     return fullText; // Return a single string containing all paragraphs
 }
-
-const Doc_reader = () => {
-    const [paragraphs, setParagraphs] = useState("");
-
-    const onFileUpload = (event) => {
-        const reader = new FileReader();
-        let file = event.target.files[0];
-
-        reader.onload = (e) => {
-            const content = e.target.result;
-            const fullText = getParagraphs(content);
-            setParagraphs(fullText);
-        };
-
-        reader.onerror = (err) => console.error(err);
-
-        reader.readAsBinaryString(file);
-    };
-
-
-    return <input type="file" onChange={onFileUpload} name="docx-reader" />;
-};
-
-export default Doc_reader;

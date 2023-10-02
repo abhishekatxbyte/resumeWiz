@@ -1,11 +1,11 @@
-export function extractData(inputString) {
-    // function removeSpaces(dataForExtraction) {
-    //     return dataForExtraction.replace(/\s+/g, '');
-    // }
-    // const inputString = removeSpaces(dataForExtraction)
-    console.log(inputString)
+import { ADD_MULTIPLE_DATA } from "../../store/slice";
+
+export function extractData(inputString, dispatch) {
+
     const data = {
-        Profile: {},
+        Name: '',
+        Email: '',
+        Phone: '',
         Education: [],
         Experience: [],
         Skills: [],
@@ -15,13 +15,10 @@ export function extractData(inputString) {
 
     try {
 
-        data.Profile =
-        {
-            Name: extractPersonName(inputString),
-            Email: extractPersonEmail(inputString),
-            Phone: extractPersonPhone(inputString)
-        }
-        data.Experience = extractPersonExperience(inputString)
+        data.Name = extractPersonName(inputString),
+            data.Email = extractPersonEmail(inputString),
+            data.Phone = extractPersonPhone(inputString),
+            data.Experience = extractPersonExperience(inputString)
         data.Education = extractPersonEducation(inputString)
         data.Skills = extractPersonSkills(inputString)
         data.Projects = extractPersonProjects(inputString)
@@ -31,8 +28,7 @@ export function extractData(inputString) {
         console.error('Error extracting data:', error);
     }
     // console.log(inputString)
-    // console.log(data.Email)
-    // console.log(data.Phone)
+    dispatch(ADD_MULTIPLE_DATA(data))
     return data;
 }
 function removeExtraSpaces(inputString) {
@@ -67,7 +63,6 @@ function extractPersonName(inputString) {
         const clean = removeExtraSpaces(inputString);
         const match = clean.match(regex);
         if (match) {
-            console.log(inputString)
 
             return match[0].trim().replace(/\s+/g, ' ');
         }
@@ -122,6 +117,28 @@ function extractPersonEducation(inputString) {
 
     return educationEntries;
 }
+function extractPersonExperience(inputString) {
+    const experienceSectionRegex2 = /EXPERIENCE([\s\S]*?)(?=PROJECT|$)/i;
+    const experienceSectionMatches2 = inputString.match(experienceSectionRegex2);
+    const experienceSectionRegex = /PROFESSIONAL\s+EXPERIENCE([\s\S]*?)(?=Company\s+Name:|\n\n|$)/i;
+    const experienceSectionMatches = inputString.match(experienceSectionRegex);
+    let experiencEntries = [];
+
+    if (experienceSectionMatches2) {
+        const experienceData = experienceSectionMatches2[1].trim();
+        const experienceLines = experienceData.split('\n').map(line => line.trim());
+        experiencEntries = [...experienceLines]
+
+    }
+
+    if (experienceSectionMatches) {
+        const experienceData = experienceSectionMatches[1].trim();
+        const experienceLines = experienceData.split('\n').map(line => line.trim());
+        experiencEntries = [...experienceLines]
+
+    }
+    return experiencEntries;
+}
 
 
 function extractPersonSkills(inputString) {
@@ -148,24 +165,6 @@ function extractPersonSkills(inputString) {
     return skillsArray;
 }
 
-function extractPersonExperience(inputString) {
-    const experienceSectionRegex2 = /EXPERIENCE([\s\S]*?)(?=PROJECT|$)/i;
-    const experienceSectionMatches2 = inputString.match(experienceSectionRegex2);
-    const experienceSectionRegex = /PROFESSIONAL\s+EXPERIENCE([\s\S]*?)(?=Company\s+Name:|\n\n|$)/i;
-    const experienceSectionMatches = inputString.match(experienceSectionRegex);
-
-    if (experienceSectionMatches2) {
-        const experienceData = experienceSectionMatches2[1].trim();
-        return experienceData;
-    }
-
-    if (experienceSectionMatches) {
-        const experienceData = experienceSectionMatches[1].trim();
-        return experienceData;
-    }
-
-    return '';
-}
 
 function extractPersonProjects(inputString) {
     const projectsSectionRegex2 = /PROJECT([\s\S]*?)(?=INTERESTS|$)/i;

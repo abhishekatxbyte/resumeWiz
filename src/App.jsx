@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ENABLE_AI, loading, outputData, REMOVE_DATA } from './store/slice';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import FileUpload from './Components/FileUpdate/FileUpload';
-import ExtractedTable from './Components/FileUpdate/ExtractedTable';
+import ExtractedDataPage from './Components/FileUpdate/ExtractedDataPage';
 import Ocr from './Components/FileUpdate/Ocr';
 
 
@@ -22,7 +22,7 @@ function App() {
       navigate('/loading')
     }
     else if (data && !isloading) {
-      navigate('/data')
+      navigate('/')
     } else {
       navigate('/')
     }
@@ -67,7 +67,7 @@ function App() {
         <Route path="/" element={layout(<FileUpload />)} />
         <Route path="/ocr" element={layout(<Ocr />)} />
 
-        <Route path="/data" element={layout(<><ExtractedTable /></>)} />
+        <Route path="/data" element={layout(<><ExtractedDataPage /></>)} />
         <Route path="/loading" element={<Spinner animation="border" />} />
       </Routes>
     </div>

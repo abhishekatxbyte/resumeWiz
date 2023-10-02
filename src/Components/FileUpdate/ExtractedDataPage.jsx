@@ -12,16 +12,16 @@ import Projects from './../../assets/projects.svg'
 import Interests from './../../assets/interests.svg'
 import Pdf from './../../assets/pdf.svg'
 
-import './ExtractedTable.css'
+import './ExtractedDataPage.css'
 import { Document, Page } from 'react-pdf';
-function ExtractedTable() {
+function ExtractedDataPage() {
     let result = useSelector(outputData)
     let pdfFile = useSelector(inputFile)
-    console.log(pdfFile)
+    console.log(result, typeof result)
     if (typeof result === "string") {
-        result = JSON.parse(result)
+        const data = JSON.parse(result)
+        result = data
     }
-    console.log(result)
     const [key, setKey] = useState('home');
     if (!result) {
         return null; // Handle the case where results are not defined
@@ -95,4 +95,4 @@ function ExtractedTable() {
     }
 }
 
-export default ExtractedTable;
+export default ExtractedDataPage;
