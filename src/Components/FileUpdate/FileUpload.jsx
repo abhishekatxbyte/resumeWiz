@@ -268,10 +268,9 @@ import ExtractedTable from './ExtractedTable/ExtractedTable';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const keywordRegex = /^(.*?(EDUCATION|CURRICULUM|HISTORY|PROFESSIONAL|Name|ADDRESS|EXPERIENCE|EXPERIENCES|internshipS|DOB|OBJECTIVE|Languages|Date\s+of\s+Birth|Resume|PROFESSIONAL|HISTORY|Nationality|Marital Status|Gender|PROJECT|PROJECTS|INTERESTS|SKILLS|SKILL|CONTACT|SUMMARY|PROFILE|ABOUT|HOBBIES|RESUME|CAREER|INTERESTS).*?)$/im;
-
 function FileUpload() {
     const inputRef = useRef();
+    const [multipleExtractedText, setMultipleExtracted] = useState([])
     const [switchState, setSwitchState] = useState(false);
     const [formFields, setFormFields] = useState([
         { category: '', keywords: '', description: '' },
@@ -317,66 +316,32 @@ function FileUpload() {
     };
     const ai_enable = useSelector(ai_status);
     const dispatch = useDispatch();
-    // Function to handle PDF file
+
     const handlePdfFile = async (file) => {
         const fileUrl = URL.createObjectURL(file);
-
         try {
             const pdf = await pdfjs.getDocument(fileUrl).promise;
             dispatch(ADD_FILE(fileUrl));
-            convertPdfToText(pdf, ai_enable, dispatch, switchState, schema);
+            const extractedText = await convertPdfToText(pdf, setMultipleExtracted);
+            console.log(extractedText)
+            console.log(multipleExtractedText)
+            console.log('second')
+            if (ai_enable) {
+                console.log('first')
+                const propObject = {
+                    userInput: extractedText, enableCustom: switchState, customSchema: schema
+                }
+                console.log(extractedText)
+                dispatch(sendTextForExtraction(propObject))
+            } else {
+                const extractedData = extractData(extractedText, dispatch)
+                dispatch(ADD_DATA(extractedText ? extractedData : null))
+            }
         } catch (error) {
             console.error('Error loading PDF:', error);
         }
     };
 
-    // const handleFileChange = async (e) => {
-    //     const file = e.target.files[0];
-
-    //     if (file instanceof File || file instanceof Blob) {
-    //         try {
-    //             submit();
-
-    //             if (file.type === 'application/pdf') {
-    //                 handlePdfFile(file);
-    //             } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-    // // If it's a DOCX file, read and extract text
-    // const reader = new FileReader();
-    // reader.onload = async (e) => {
-    //     const content = e.target.result;
-    //     const fullText = getParagraphs(content);
-    //     if (fullText) {
-    //         if (ai_enable) {
-    //             console.log(schema);
-    //             const propObject = {
-    //                 userInput: fullText,
-    //                 enableCustom: switchState,
-    //                 customSchema: schema,
-    //             };
-    //             console.log(schema);
-
-    //             dispatch(sendTextForExtraction(propObject));
-    //         } else {
-    //             dispatch(
-    //                 ADD_DATA(
-    //                     fullText ? extractData(fullText, keywordRegex) : null
-    //                 )
-    //             );
-    //         }
-    //     }
-    // };
-    // reader.readAsBinaryString(file);
-    //             } else if (file.type.startsWith('image/')) {
-    //                 // If it's an image file, handle it separately
-    // handleImageFile(file, dispatch, submit, switchState, schema, ai_enable, extractData, sendTextForExtraction);
-    //             }
-    //         } catch (error) {
-    //             console.error("Error handling file:", error);
-    //         }
-    //     } else {
-    //         console.error("Invalid file object:", file);
-    //     }
-    // };
     const handleFileChange = async (e) => {
         const files = e.target.files;
 
@@ -492,7 +457,7 @@ function FileUpload() {
     }
     return (
         <div>
-            <div className="container">
+            <div >
                 {ai_enable ? <>
                     <div style={{ display: "flex" }}>
                         <Form>
